@@ -1,0 +1,1163 @@
+{
+  "mariadb_version": "10.11.14-MariaDB-0ubuntu0.24.04.1",
+  "python": "3.13.18",
+  "machine": "Linux-6.18.44-fc-v726-x86_64-with-glibc2.39",
+  "cpu_count": 2,
+  "repeats": 5,
+  "sizes": {
+    "players": 1000,
+    "games": 100000,
+    "logins": 200000,
+    "games_played": 300,
+    "migration_rows": 300000
+  },
+  "explain": {
+    "10.0.0.0/8": {
+      "modern": {
+        "type": "ALL",
+        "key": null,
+        "rows": 200000
+      },
+      "baseline": {
+        "type": "ALL",
+        "key": null,
+        "rows": 200000
+      }
+    },
+    "10.1.0.0/16": {
+      "modern": {
+        "type": "range",
+        "key": "idx_login_ip",
+        "rows": 342
+      },
+      "baseline": {
+        "type": "ALL",
+        "key": null,
+        "rows": 200000
+      }
+    }
+  },
+  "raw": {
+    "modern": {
+      "storage": [
+        {
+          "seconds": {
+            "games": 0.5785774719998926,
+            "game_players": 1.3430698380000194,
+            "logins": 2.189908406000086
+          },
+          "bytes": {
+            "games": {
+              "data": 5783552,
+              "index": 5275648,
+              "total": 11059200
+            },
+            "game_players": {
+              "data": 21561344,
+              "index": 19955712,
+              "total": 41517056
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 15794176,
+              "total": 27869184
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 0.5933060649999788,
+            "game_players": 1.5412055369999962,
+            "logins": 2.160678595000036
+          },
+          "bytes": {
+            "games": {
+              "data": 5783552,
+              "index": 5275648,
+              "total": 11059200
+            },
+            "game_players": {
+              "data": 21561344,
+              "index": 19955712,
+              "total": 41517056
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 15794176,
+              "total": 27869184
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 0.691015120999964,
+            "game_players": 1.3113569689999167,
+            "logins": 2.037243805000003
+          },
+          "bytes": {
+            "games": {
+              "data": 5783552,
+              "index": 5275648,
+              "total": 11059200
+            },
+            "game_players": {
+              "data": 21561344,
+              "index": 19955712,
+              "total": 41517056
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 15794176,
+              "total": 27869184
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 0.6372457940000231,
+            "game_players": 1.4516089210000018,
+            "logins": 2.0750699239999904
+          },
+          "bytes": {
+            "games": {
+              "data": 5783552,
+              "index": 5275648,
+              "total": 11059200
+            },
+            "game_players": {
+              "data": 21561344,
+              "index": 19955712,
+              "total": 41517056
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 15794176,
+              "total": 27869184
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 0.5732803629998671,
+            "game_players": 1.4413872810000612,
+            "logins": 2.266796531999944
+          },
+          "bytes": {
+            "games": {
+              "data": 5783552,
+              "index": 5275648,
+              "total": 11059200
+            },
+            "game_players": {
+              "data": 21561344,
+              "index": 19955712,
+              "total": 41517056
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 15794176,
+              "total": 27869184
+            }
+          }
+        }
+      ],
+      "moves": [
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 9,
+            "create_game": 4,
+            "leave_game": 5
+          },
+          "ms_per_move_median": 1.6891899999791349
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 9,
+            "create_game": 4,
+            "leave_game": 5
+          },
+          "ms_per_move_median": 1.6649559998995755
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 9,
+            "create_game": 4,
+            "leave_game": 5
+          },
+          "ms_per_move_median": 1.7228379999778554
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 9,
+            "create_game": 4,
+            "leave_game": 5
+          },
+          "ms_per_move_median": 1.613424999959534
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 9,
+            "create_game": 4,
+            "leave_game": 5
+          },
+          "ms_per_move_median": 1.7581540000719542
+        }
+      ],
+      "network": [
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 204.62271999997483
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 3.053930999953991
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 23.006895999969856
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 227.1947200000568
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 1.7524749999893174
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 23.14921599997888
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 185.5319100000088
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 2.858951000007437
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 27.77588399999331
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 187.42995200000223
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 1.978124999936881
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 24.58723600000212
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 187.12964799988185
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 2.3230260001128045
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 26.449791000004552
+          }
+        }
+      ]
+    },
+    "baseline": {
+      "storage": [
+        {
+          "seconds": {
+            "games": 1.4879669219999414,
+            "game_players": 1.8539610100000345,
+            "logins": 2.2051884809999365
+          },
+          "bytes": {
+            "games": {
+              "data": 12107776,
+              "index": 16875520,
+              "total": 28983296
+            },
+            "game_players": {
+              "data": 31096832,
+              "index": 32653312,
+              "total": 63750144
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 17891328,
+              "total": 29966336
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 1.863617483999974,
+            "game_players": 1.8249374739999666,
+            "logins": 2.485564642999975
+          },
+          "bytes": {
+            "games": {
+              "data": 12107776,
+              "index": 16875520,
+              "total": 28983296
+            },
+            "game_players": {
+              "data": 30048256,
+              "index": 32653312,
+              "total": 62701568
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 17891328,
+              "total": 29966336
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 1.4320493559999932,
+            "game_players": 1.7725056909999921,
+            "logins": 2.035243802000082
+          },
+          "bytes": {
+            "games": {
+              "data": 12107776,
+              "index": 16875520,
+              "total": 28983296
+            },
+            "game_players": {
+              "data": 31096832,
+              "index": 34750464,
+              "total": 65847296
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 17891328,
+              "total": 29966336
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 1.3680219660000148,
+            "game_players": 1.6893539989999908,
+            "logins": 2.2277963170000703
+          },
+          "bytes": {
+            "games": {
+              "data": 12107776,
+              "index": 15826944,
+              "total": 27934720
+            },
+            "game_players": {
+              "data": 31064064,
+              "index": 32686080,
+              "total": 63750144
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 17891328,
+              "total": 29966336
+            }
+          }
+        },
+        {
+          "seconds": {
+            "games": 1.5546381930000734,
+            "game_players": 1.9371226220000608,
+            "logins": 2.2503581490000215
+          },
+          "bytes": {
+            "games": {
+              "data": 12107776,
+              "index": 16875520,
+              "total": 28983296
+            },
+            "game_players": {
+              "data": 30015488,
+              "index": 34750464,
+              "total": 64765952
+            },
+            "logins": {
+              "data": 12075008,
+              "index": 17891328,
+              "total": 29966336
+            }
+          }
+        }
+      ],
+      "moves": [
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 10,
+            "create_game": 4,
+            "leave_game": 6
+          },
+          "ms_per_move_median": 1.8880669999816746
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 10,
+            "create_game": 4,
+            "leave_game": 6
+          },
+          "ms_per_move_median": 1.8632640000078027
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 10,
+            "create_game": 4,
+            "leave_game": 6
+          },
+          "ms_per_move_median": 1.6951409999137468
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 10,
+            "create_game": 4,
+            "leave_game": 6
+          },
+          "ms_per_move_median": 1.6788579999911235
+        },
+        {
+          "moves": 5687,
+          "statements": {
+            "move": 10,
+            "create_game": 4,
+            "leave_game": 6
+          },
+          "ms_per_move_median": 1.7957180000394146
+        }
+      ],
+      "network": [
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 1165.504134999992
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 843.5058119999894
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 767.5169909999795
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 1336.8805979999934
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 1002.0187530000157
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 794.6993179999708
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 1391.8444340000633
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 889.6681560000843
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 808.8068380000095
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 1089.5082250000314
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 772.3677359999783
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 759.0373189999582
+          }
+        },
+        {
+          "10.0.0.0/8": {
+            "rows_found": 80221,
+            "ms": 1181.1298889999762
+          },
+          "10.1.0.0/16": {
+            "rows_found": 342,
+            "ms": 806.0248490000959
+          },
+          "distinct": {
+            "count": 189768,
+            "ms": 800.1119130001371
+          }
+        }
+      ]
+    }
+  },
+  "summary": {
+    "modern": {
+      "bytes": {
+        "games": 11059200,
+        "game_players": 41517056,
+        "logins": 27869184
+      },
+      "seconds": {
+        "games": {
+          "median": 0.5933,
+          "stdev": 0.0495,
+          "runs": [
+            0.5786,
+            0.5933,
+            0.691,
+            0.6372,
+            0.5733
+          ]
+        },
+        "game_players": {
+          "median": 1.4414,
+          "stdev": 0.092,
+          "runs": [
+            1.3431,
+            1.5412,
+            1.3114,
+            1.4516,
+            1.4414
+          ]
+        },
+        "logins": {
+          "median": 2.1607,
+          "stdev": 0.0916,
+          "runs": [
+            2.1899,
+            2.1607,
+            2.0372,
+            2.0751,
+            2.2668
+          ]
+        }
+      },
+      "statements": {
+        "move": 9,
+        "create_game": 4,
+        "leave_game": 5
+      },
+      "moves": 5687,
+      "ms_per_move": {
+        "median": 1.6892,
+        "stdev": 0.0553,
+        "runs": [
+          1.6892,
+          1.665,
+          1.7228,
+          1.6134,
+          1.7582
+        ]
+      },
+      "network": {
+        "10.0.0.0/8": {
+          "rows_found": 80221,
+          "ms": {
+            "median": 187.43,
+            "stdev": 17.8942,
+            "runs": [
+              204.6227,
+              227.1947,
+              185.5319,
+              187.43,
+              187.1296
+            ]
+          }
+        },
+        "10.1.0.0/16": {
+          "rows_found": 342,
+          "ms": {
+            "median": 2.323,
+            "stdev": 0.5571,
+            "runs": [
+              3.0539,
+              1.7525,
+              2.859,
+              1.9781,
+              2.323
+            ]
+          }
+        }
+      },
+      "distinct": 189768,
+      "distinct_ms": {
+        "median": 24.5872,
+        "stdev": 2.0842,
+        "runs": [
+          23.0069,
+          23.1492,
+          27.7759,
+          24.5872,
+          26.4498
+        ]
+      }
+    },
+    "baseline": {
+      "bytes": {
+        "games": 28983296,
+        "game_players": 63750144,
+        "logins": 29966336
+      },
+      "seconds": {
+        "games": {
+          "median": 1.488,
+          "stdev": 0.1929,
+          "runs": [
+            1.488,
+            1.8636,
+            1.432,
+            1.368,
+            1.5546
+          ]
+        },
+        "game_players": {
+          "median": 1.8249,
+          "stdev": 0.0924,
+          "runs": [
+            1.854,
+            1.8249,
+            1.7725,
+            1.6894,
+            1.9371
+          ]
+        },
+        "logins": {
+          "median": 2.2278,
+          "stdev": 0.161,
+          "runs": [
+            2.2052,
+            2.4856,
+            2.0352,
+            2.2278,
+            2.2504
+          ]
+        }
+      },
+      "statements": {
+        "move": 10,
+        "create_game": 4,
+        "leave_game": 6
+      },
+      "moves": 5687,
+      "ms_per_move": {
+        "median": 1.7957,
+        "stdev": 0.0951,
+        "runs": [
+          1.8881,
+          1.8633,
+          1.6951,
+          1.6789,
+          1.7957
+        ]
+      },
+      "network": {
+        "10.0.0.0/8": {
+          "rows_found": 80221,
+          "ms": {
+            "median": 1181.1299,
+            "stdev": 126.3515,
+            "runs": [
+              1165.5041,
+              1336.8806,
+              1391.8444,
+              1089.5082,
+              1181.1299
+            ]
+          }
+        },
+        "10.1.0.0/16": {
+          "rows_found": 342,
+          "ms": {
+            "median": 843.5058,
+            "stdev": 89.2712,
+            "runs": [
+              843.5058,
+              1002.0188,
+              889.6682,
+              772.3677,
+              806.0248
+            ]
+          }
+        }
+      },
+      "distinct": 189768,
+      "distinct_ms": {
+        "median": 794.6993,
+        "stdev": 21.5846,
+        "runs": [
+          767.517,
+          794.6993,
+          808.8068,
+          759.0373,
+          800.1119
+        ]
+      }
+    }
+  },
+  "uuid_control": {
+    "id_char36_python": {
+      "type": "CHAR(36) ascii",
+      "source": "Python uuid4()",
+      "bytes": 11059200,
+      "seconds": {
+        "median": 0.6648,
+        "stdev": 0.0509,
+        "runs": [
+          0.6409,
+          0.7269,
+          0.5881,
+          0.6648,
+          0.6784
+        ]
+      }
+    },
+    "id_uuid_python": {
+      "type": "UUID",
+      "source": "Python uuid4()",
+      "bytes": 6832128,
+      "seconds": {
+        "median": 0.5965,
+        "stdev": 0.0263,
+        "runs": [
+          0.6293,
+          0.5965,
+          0.6101,
+          0.5866,
+          0.559
+        ]
+      }
+    },
+    "id_uuid_server": {
+      "type": "UUID",
+      "source": "server UUID()",
+      "bytes": 4734976,
+      "seconds": {
+        "median": 0.3106,
+        "stdev": 0.0276,
+        "runs": [
+          0.2941,
+          0.3106,
+          0.3277,
+          0.3386,
+          0.2691
+        ]
+      }
+    }
+  },
+  "ipv4_only": {
+    "ip4_varchar": {
+      "type": "VARCHAR(15) ascii",
+      "bytes": 18907136
+    },
+    "ip4_inet6": {
+      "type": "INET6 (IPv4-mapped)",
+      "bytes": 18907136
+    },
+    "ip4_inet4": {
+      "type": "INET4",
+      "bytes": 11567104
+    }
+  },
+  "ip_correctness": {
+    "sample": [
+      "10.0.0.9",
+      "10.0.0.10",
+      "10.9.0.1",
+      "10.255.0.1",
+      "192.168.1.5",
+      "2001:db8::1",
+      "2001:0db8:0000:0000:0000:0000:0000:0001",
+      "not-an-ip"
+    ],
+    "true": {
+      "distinct": 6,
+      "in_10_0_0_0_8": 4,
+      "ipv4_sorted": [
+        "10.0.0.9",
+        "10.0.0.10",
+        "10.9.0.1",
+        "10.255.0.1",
+        "192.168.1.5"
+      ]
+    },
+    "modern": {
+      "refuses_garbage": true,
+      "error": "1292 (22007): Incorrect inet6 value: 'not-an-ip' for column `snl_modern`.`t`.`ip` at row 1",
+      "distinct": 6,
+      "in_10_0_0_0_8": 4,
+      "ipv4_sorted": [
+        "10.0.0.9",
+        "10.0.0.10",
+        "10.9.0.1",
+        "10.255.0.1",
+        "192.168.1.5"
+      ]
+    },
+    "baseline": {
+      "refuses_garbage": false,
+      "distinct": 8,
+      "in_10_0_0_0_8": 3,
+      "ipv4_sorted": [
+        "10.0.0.10",
+        "10.0.0.9",
+        "10.255.0.1",
+        "10.9.0.1",
+        "192.168.1.5"
+      ]
+    }
+  },
+  "migration": {
+    "rows": 300000,
+    "algorithms": {
+      "INSTANT": {
+        "add": {
+          "seconds": {
+            "median": 0.0063,
+            "stdev": 0.0315,
+            "runs": [
+              0.0772,
+              0.0037,
+              0.0201,
+              0.0063,
+              0.0036
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 3.4597,
+            "stdev": 30.063,
+            "runs": [
+              72.0378,
+              2.2171,
+              17.4342,
+              3.4597,
+              2.3347
+            ]
+          },
+          "writes_during": {
+            "median": 9,
+            "stdev": 4.7645,
+            "runs": [
+              18,
+              10,
+              9,
+              9,
+              5
+            ]
+          }
+        },
+        "drop": {
+          "seconds": {
+            "median": 0.0048,
+            "stdev": 0.0013,
+            "runs": [
+              0.007,
+              0.0037,
+              0.0048,
+              0.0052,
+              0.0045
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 3.0176,
+            "stdev": 0.8842,
+            "runs": [
+              4.8289,
+              2.9534,
+              3.0176,
+              4.2581,
+              2.9467
+            ]
+          },
+          "writes_during": {
+            "median": 7,
+            "stdev": 1.0954,
+            "runs": [
+              8,
+              5,
+              7,
+              7,
+              7
+            ]
+          }
+        },
+        "data_mb_before": 46.578125,
+        "data_mb_after_drop": 46.578125
+      },
+      "INPLACE": {
+        "add": {
+          "seconds": {
+            "median": 0.0054,
+            "stdev": 0.0609,
+            "runs": [
+              0.0054,
+              0.0052,
+              0.0035,
+              0.129,
+              0.0993
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 3.3602,
+            "stdev": 49.2703,
+            "runs": [
+              2.4692,
+              3.3602,
+              2.4224,
+              86.6722,
+              98.1249
+            ]
+          },
+          "writes_during": {
+            "median": 6,
+            "stdev": 0.8367,
+            "runs": [
+              6,
+              7,
+              7,
+              6,
+              5
+            ]
+          }
+        },
+        "drop": {
+          "seconds": {
+            "median": 0.0053,
+            "stdev": 0.0012,
+            "runs": [
+              0.004,
+              0.0073,
+              0.0059,
+              0.0049,
+              0.0053
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 3.3414,
+            "stdev": 0.6298,
+            "runs": [
+              2.8241,
+              4.3779,
+              3.9919,
+              3.1821,
+              3.3414
+            ]
+          },
+          "writes_during": {
+            "median": 6,
+            "stdev": 1.0954,
+            "runs": [
+              6,
+              8,
+              6,
+              5,
+              6
+            ]
+          }
+        },
+        "data_mb_before": 46.578125,
+        "data_mb_after_drop": 46.578125
+      },
+      "INPLACE+FORCE": {
+        "add": {
+          "seconds": {
+            "median": 0.3399,
+            "stdev": 0.0727,
+            "runs": [
+              0.3955,
+              0.4044,
+              0.3399,
+              0.2562,
+              0.254
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 48.2932,
+            "stdev": 15.0613,
+            "runs": [
+              65.1915,
+              57.5629,
+              48.2932,
+              29.2716,
+              34.7977
+            ]
+          },
+          "writes_during": {
+            "median": 240,
+            "stdev": 71.3337,
+            "runs": [
+              226,
+              275,
+              397,
+              240,
+              232
+            ]
+          }
+        },
+        "drop": {
+          "seconds": {
+            "median": 0.2056,
+            "stdev": 0.0375,
+            "runs": [
+              0.1474,
+              0.1535,
+              0.2095,
+              0.233,
+              0.2056
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 53.3766,
+            "stdev": 20.6002,
+            "runs": [
+              14.445,
+              19.5689,
+              53.3766,
+              54.3596,
+              55.5967
+            ]
+          },
+          "writes_during": {
+            "median": 321,
+            "stdev": 112.8508,
+            "runs": [
+              492,
+              258,
+              281,
+              485,
+              321
+            ]
+          }
+        },
+        "data_mb_before": 46.578125,
+        "data_mb_after_drop": 17.546875
+      },
+      "COPY": {
+        "add": {
+          "seconds": {
+            "median": 0.9135,
+            "stdev": 0.0734,
+            "runs": [
+              0.9182,
+              0.779,
+              0.8685,
+              0.9135,
+              0.976
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 913.4186,
+            "stdev": 72.9348,
+            "runs": [
+              917.5335,
+              778.3819,
+              867.6909,
+              913.4186,
+              973.7569
+            ]
+          },
+          "writes_during": {
+            "median": 4,
+            "stdev": 4.3818,
+            "runs": [
+              4,
+              5,
+              4,
+              4,
+              14
+            ]
+          }
+        },
+        "drop": {
+          "seconds": {
+            "median": 0.4037,
+            "stdev": 0.0683,
+            "runs": [
+              0.3561,
+              0.5215,
+              0.4037,
+              0.3526,
+              0.4069
+            ]
+          },
+          "max_write_wait_ms": {
+            "median": 404.0724,
+            "stdev": 67.9472,
+            "runs": [
+              355.9078,
+              520.6196,
+              404.0724,
+              352.7626,
+              405.9955
+            ]
+          },
+          "writes_during": {
+            "median": 5,
+            "stdev": 1.1402,
+            "runs": [
+              4,
+              5,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        "data_mb_before": 46.578125,
+        "data_mb_after_drop": 17.546875
+      }
+    },
+    "impossible_instant_change": "1846 (0A000): ALGORITHM=INSTANT is not supported. Reason: Cannot change column type. Try ALGORITHM=COPY"
+  },
+  "schema_scripts": {
+    "modern": {
+      "create_or_replace": 7,
+      "drop_if_exists_lists": 0,
+      "rerun_seconds": 0.08404426200013404
+    },
+    "baseline": {
+      "create_or_replace": 0,
+      "drop_if_exists_lists": 1,
+      "rerun_seconds": 0.12264334000019517
+    }
+  },
+  "code_lines": {
+    "modern": 49,
+    "baseline": 63,
+    "shared": 119
+  }
+}

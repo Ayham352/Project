@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Modern vs baseline · Snakes &amp; Ladders{% endblock %}
+{% macro mb(n) %}{{ '%.1f'|format(n / 1048576) }} MB{% endmacro %}
+{% macro w(s, d=1) %}{{ ('%.' ~ d ~ 'f')|format(s.median) }} (worst {{ ('%.' ~ d ~ 'f')|format(s.runs|max) }}){% endmacro %}
+{% macro t(s, d=1) %}{{ ('%.' ~ d ~ 'f')|format(s.median) }} ± {{ ('%.' ~ d ~ 'f')|format(s.stdev) }}{% endmacro %}
+{% block content %}
+<h1>Modern vs baseline</h1>
+<p class="muted">The same game on two databases. <strong>Modern</strong> uses <code>UUID</code>, <code>INET6</code>,
+<code>RETURNING</code>, <code>CREATE OR REPLACE</code> and instant <code>ALTER TABLE</code>; <strong>baseline</strong> does the same jobs without them.</p>
+
+<div class="card">
+  <h2>Live check: the same 8 addresses on both databases</h2>
+  <p class="muted" style="font-size:.85rem">Run just now on this server. Values: {% for v in live.sample %}<code>{{ v }}</code> {% endfor %}</p>
+  <table>
+    <tr><th>Check</th><th>Correct</th><th>Modern (<code>INET6</code>)</th><th>Baseline (text)</th></tr>
+    <tr><td>Refuses <code>not-an-ip</code></td><td>yes</td><td>{{ 'yes' if live.modern.refuses_garbage else 'no' }}</td><td>no</td></tr>
+    <tr><td><code>COUNT(DISTINCT ip)</code></td><td>{{ live.true.distinct }}</td><td>{{ live.modern.distinct }}</td><td>{{ live.baseline.distinct }}</td></tr>
+    <tr><td>Rows in 10.0.0.0/8 by <code>BETWEEN</code></td><td>{{ live.true.in_10_0_0_0_8 }}</td><td>{{ live.modern.in_10_0_0_0_8 }}</td><td>{{ live.baseline.in_10_0_0_0_8 }}</td></tr>
+    <tr><td>IPv4 <code>ORDER BY ip</code></td><td>{{ live.true.ipv4_sorted|join(', ') }}</td><td>{{ live.modern.ipv4_sorted|join(', ') }}</td><td>{{ live.baseline.ipv4_sorted|join(', ') }}</td></tr>
+  </table>
+</div>
+
+{% if r %}
+{% set m, b = r.summary.modern, r.summary.baseline %}
+<p class="muted" style="font-size:.85rem">Benchmark below: MariaDB {{ r.mariadb_version }}, median ± standard deviation of {{ r.repeats }} runs
+({{ '{:,}'.format(r.sizes.games) }} games, {{ '{:,}'.format(r.sizes.logins) }} logins). Re-run with <code>python -m bench.benchmark</code>.</p>
+<div class="grid2">
+  <div class="card">
+    <h2>Storage</h2>
+    <table>
+      <tr><th>Table</th><th>Modern</th><th>Baseline</th></tr>
+      {% for tb in ['games', 'game_players', 'logins'] %}
+      <tr><td><code>{{ tb }}</code></td><td>{{ mb(m.bytes[tb]) }}</td><td>{{ mb(b.bytes[tb]) }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="card">
+    <h2>Statements per action</h2>
+    <table>
+      <tr><th>Action</th><th>Modern</th><th>Baseline</th></tr>
+      <tr><td>One move</td><td>{{ m.statements.move }}</td><td>{{ b.statements.move }}</td></tr>
+      <tr><td>Leave a game</td><td>{{ m.statements.leave_game }}</td><td>{{ b.statements.leave_game }}</td></tr>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <h2>Network search (ms)</h2>
+  <table>
+    <tr><th>Query</th><th>Modern</th><th>Baseline</th></tr>
+    {% for c, v in m.network.items() %}
+    <tr><td>Logins in <code>{{ c }}</code> ({{ '{:,}'.format(v.rows_found) }} rows)</td><td>{{ t(v.ms) }}</td><td>{{ t(b.network[c].ms) }}</td></tr>
+    {% endfor %}
+    <tr><td>Count distinct addresses</td><td>{{ t(m.distinct_ms) }}</td><td>{{ t(b.distinct_ms) }}</td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>Adding a column to {{ '{:,}'.format(r.migration.rows) }} rows while the game keeps writing</h2>
+  <p class="muted" style="font-size:.85rem">Median of {{ r.repeats }} runs, slowest run in brackets.</p>
+  <table>
+    <tr><th><code>ALGORITHM</code></th><th>Time (s)</th><th>Longest wait of a live write (ms)</th></tr>
+    {% for algo, s in r.migration.algorithms.items() %}
+    <tr><td>{{ algo }}</td><td>{{ w(s.add.seconds, 3) }}</td><td>{{ w(s.add.max_write_wait_ms) }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+{% else %}
+<div class="card"><p class="muted">No benchmark results yet. Run <code>python -m bench.benchmark</code>.</p></div>
+{% endif %}
+{% endblock %}

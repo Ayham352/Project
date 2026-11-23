@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Game · Snakes &amp; Ladders{% endblock %}
+{% block content %}
+{% set my_turn = game.status == 'active' and current and current.username == me %}
+{% if game.status != 'finished' and not my_turn %}<meta http-equiv="refresh" content="4">{% endif %}
+<style>
+  .board { display:grid; gap:3px; margin:.5rem 0; }
+  .sq { aspect-ratio:1; border-radius:6px; background:#fff; border:1px solid var(--line);
+        position:relative; font-size:.7rem; padding:3px; overflow:hidden; }
+  .sq .n { color:var(--muted); }
+  .sq.ladder { background:var(--ladder); } .sq.snake { background:var(--snake); }
+  .sq .j { position:absolute; bottom:2px; left:3px; font-size:.65rem; }
+  .tokens { position:absolute; top:3px; right:3px; display:flex; flex-wrap:wrap; gap:2px; justify-content:flex-end; }
+  .tok { width:14px; height:14px; border-radius:50%; border:1.5px solid #fff; box-shadow:0 0 0 1px #0003; }
+  .p1 { background:#2563eb; } .p2 { background:#dc2626; } .p3 { background:#ca8a04; } .p4 { background:#7c3aed; }
+  .layout { display:grid; grid-template-columns: minmax(0,3fr) minmax(220px,2fr); gap:1.2rem; align-items:start; }
+  @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }
+</style>
+
+<h1>{{ game.board_name }} <span class="muted" style="font-size:1rem">· {{ game.status }}</span></h1>
+<p class="muted">Game code: <code>{{ game.game_id }}</code> (share it so others can join)</p>
+
+<div class="layout">
+  <div class="card">
+    <div class="board" style="grid-template-columns: repeat({{ rows[0]|length }}, 1fr)">
+      {% for row in rows %}{% for n in row %}
+        {% set j = jumps.get(n) %}
+        <div class="sq {{ j.jump_type if j else '' }}">
+          <span class="n">{{ n }}</span>
+          {% if j %}<span class="j">{{ '▲' if j.jump_type == 'ladder' else '▼' }} {{ j.end_square }}</span>{% endif %}
+          <div class="tokens">{% for p in on_square.get(n, []) %}<span class="tok p{{ p.turn_order }}" title="{{ p.username }}"></span>{% endfor %}</div>
+        </div>
+      {% endfor %}{% endfor %}
+    </div>
+    <p class="muted" style="font-size:.85rem">Green ▲ = ladder up to that square · Red ▼ = snake down to that square. Land exactly on {{ game.size }} to win.</p>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Players</h2>
+      <table>
+        {% for p in players %}
+        <tr><td><span class="tok p{{ p.turn_order }}" style="display:inline-block;vertical-align:middle"></span> {{ p.username }}</td>
+            <td>{{ 'start' if p.position == 0 else 'square ' ~ p.position }}</td>
+            <td>{% if game.status == 'active' and current and p.player_id == current.player_id %}◀ turn{% endif %}</td></tr>
+        {% endfor %}
+      </table>
+
+      {% if game.status == 'finished' %}
+        <p><strong>{{ game.winner }} won!</strong></p>
+        <a class="btn" href="{{ url_for('lobby') }}">Back to lobby</a>
+      {% elif game.status == 'waiting' %}
+        {% if seated %}
+          <form method="post" action="{{ url_for('start_game', game_id=game.game_id) }}" style="display:inline"><button>Start game</button></form>
+          <form method="post" action="{{ url_for('leave_game', game_id=game.game_id) }}" style="display:inline"><button class="secondary">Leave</button></form>
+          <p class="muted">Waiting for players (2 to 4). This page refreshes by itself.</p>
+        {% else %}
+          <form method="post" action="{{ url_for('join_game', game_id=game.game_id) }}"><button>Join this game</button></form>
+        {% endif %}
+      {% elif my_turn %}
+        <form method="post" action="{{ url_for('roll', game_id=game.game_id) }}"><button style="font-size:1.1rem">Roll the dice</button></form>
+      {% else %}
+        <p class="muted">Waiting for {{ current.username }} to roll…</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>How this version saved your move</h2>
+      <p class="muted" style="font-size:.85rem">Database: <strong>{{ mode }}</strong>. Game id type: {{ id_type }}.</p>
+      <p style="font-size:.85rem">Statements to store a move and get its id and time back: <strong>{{ move_sql|length }}</strong></p>
+      {% for q in move_sql %}<pre style="white-space:pre-wrap;font-size:.75rem;background:#eef2f6;padding:.5rem;border-radius:6px;margin:.3rem 0">{{ q }}</pre>{% endfor %}
+      {% if last_move %}<p class="muted" style="font-size:.8rem">Your last move: id {{ last_move.move_id }}, saved at {{ last_move.played_at }} (server time, returned to the app).</p>{% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Moves</h2>
+      {% if moves %}
+      <table>
+        <tr><th>#</th><th>Player</th><th>Roll</th><th>Move</th></tr>
+        {% for m in moves[:15] %}
+        <tr><td>{{ m.move_number }}</td><td>{{ m.username }}</td><td>{{ m.dice_roll }}</td>
+            <td>{{ m.from_square }} → {{ m.to_square }}{% if m.jump_type %} ({{ m.jump_type }}){% endif %}</td></tr>
+        {% endfor %}
+      </table>
+      {% else %}<p class="muted">No moves yet.</p>{% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
