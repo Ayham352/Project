@@ -1,0 +1,161 @@
+{
+  "mariadb_version": "10.11.14-MariaDB-0ubuntu0.24.04.1",
+  "python": "3.13.18",
+  "machine": "Linux-6.18.44-fc-v726-x86_64-with-glibc2.39",
+  "sizes": {
+    "players": 1000,
+    "games": 100000,
+    "logins": 200000,
+    "games_played": 300
+  },
+  "storage": {
+    "modern": {
+      "insert_seconds": {
+        "games": 0.6,
+        "game_players": 1.24,
+        "logins": 1.98
+      },
+      "bytes": {
+        "logins": {
+          "data": 12075008,
+          "index": 15794176
+        },
+        "game_players": {
+          "data": 21561344,
+          "index": 19955712
+        },
+        "games": {
+          "data": 5783552,
+          "index": 5275648
+        }
+      }
+    },
+    "baseline": {
+      "insert_seconds": {
+        "games": 1.49,
+        "game_players": 1.82,
+        "logins": 2.16
+      },
+      "bytes": {
+        "logins": {
+          "data": 12075008,
+          "index": 17891328
+        },
+        "game_players": {
+          "data": 31080448,
+          "index": 33701888
+        },
+        "games": {
+          "data": 12107776,
+          "index": 16875520
+        }
+      }
+    }
+  },
+  "network_search": {
+    "modern": {
+      "cidr": "10.0.0.0/8",
+      "rows_found": 80073,
+      "ms_median": 192.4,
+      "distinct_ips": 189557,
+      "distinct_ms": 22.9
+    },
+    "baseline": {
+      "cidr": "10.0.0.0/8",
+      "rows_found": 80073,
+      "ms_median": 876.4,
+      "distinct_ips": 189557,
+      "distinct_ms": 616.3
+    }
+  },
+  "moves": {
+    "modern": {
+      "moves": 5687,
+      "statements_per_move": 9,
+      "ms_per_move_median": 1.185,
+      "ms_per_move_mean": 1.246
+    },
+    "baseline": {
+      "moves": 5687,
+      "statements_per_move": 10,
+      "ms_per_move_median": 1.27,
+      "ms_per_move_mean": 1.339
+    }
+  },
+  "uuid_control": {
+    "char36_python_v4": {
+      "type": "CHAR(36) CHARACTER SET ascii",
+      "source": "python",
+      "insert_seconds": 0.86,
+      "bytes": 10010624
+    },
+    "uuid_python_v4": {
+      "type": "UUID",
+      "source": "python",
+      "insert_seconds": 0.81,
+      "bytes": 6832128
+    },
+    "uuid_server": {
+      "type": "UUID",
+      "source": "server",
+      "insert_seconds": 0.29,
+      "bytes": 4734976
+    }
+  },
+  "ip_correctness": {
+    "sample": [
+      "10.0.0.9",
+      "10.0.0.10",
+      "10.9.0.1",
+      "10.255.0.1",
+      "192.168.1.5",
+      "2001:db8::1",
+      "2001:0db8:0000:0000:0000:0000:0000:0001",
+      "not-an-ip"
+    ],
+    "true": {
+      "distinct": 6,
+      "in_10_0_0_0_8": 4,
+      "ipv4_sorted": [
+        "10.0.0.9",
+        "10.0.0.10",
+        "10.9.0.1",
+        "10.255.0.1",
+        "192.168.1.5"
+      ]
+    },
+    "modern": {
+      "rejected": [
+        "not-an-ip"
+      ],
+      "db_rejects_garbage": true,
+      "distinct": 6,
+      "in_10_0_0_0_8": 4,
+      "ipv4_sorted": [
+        "10.0.0.9",
+        "10.0.0.10",
+        "10.9.0.1",
+        "10.255.0.1",
+        "192.168.1.5"
+      ]
+    },
+    "baseline_naive_sql": {
+      "rejected": [],
+      "db_rejects_garbage": false,
+      "distinct": 8,
+      "in_10_0_0_0_8": 3,
+      "ipv4_sorted": [
+        "10.0.0.10",
+        "10.0.0.9",
+        "10.255.0.1",
+        "10.9.0.1",
+        "192.168.1.5"
+      ]
+    }
+  },
+  "code_lines": {
+    "modern": 46,
+    "baseline": 59,
+    "shared": 119
+  }
+}

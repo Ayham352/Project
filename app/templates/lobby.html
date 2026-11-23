@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Lobby · Snakes &amp; Ladders{% endblock %}
+{% block content %}
+<h1>Lobby</h1>
+<div class="grid2">
+  <form class="card" method="post" action="{{ url_for('create_game') }}">
+    <h2>New game</h2>
+    <label for="board">Board</label>
+    <select id="board" name="board_id">
+      {% for b in boards %}<option value="{{ b.board_id }}">{{ b.name }} ({{ b.size }} squares)</option>{% endfor %}
+    </select>
+    <button>Create game</button>
+  </form>
+  <form class="card" method="post" action="{{ url_for('join_by_code') }}">
+    <h2>Join with a code</h2>
+    <label for="code">Game code</label>
+    <input id="code" name="code" placeholder="e.g. 6452f21a-e739-11f1-9b90-02fc00000001" required>
+    <button>Join</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Open games</h2>
+  {% if open_games %}
+  <table>
+    <tr><th>Board</th><th>Players</th><th>Code</th><th></th></tr>
+    {% for og in open_games %}
+    <tr><td>{{ og.board_name }}</td><td>{{ og.players }} / 4</td><td><code>{{ og.game_id }}</code></td>
+      <td><form method="post" action="{{ url_for('join_game', game_id=og.game_id) }}"><button>Join</button></form></td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">No open games right now. Create one.</p>{% endif %}
+</div>
+
+<div class="card">
+  <h2>My games</h2>
+  {% if my_games %}
+  <table>
+    <tr><th>Board</th><th>Status</th><th>Created</th><th></th></tr>
+    {% for mg in my_games %}
+    <tr><td>{{ mg.board_name }}</td><td>{{ mg.status }}</td><td>{{ mg.created_at }}</td>
+      <td><a href="{{ url_for('show_game', game_id=mg.game_id) }}">Open</a></td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">You have not played yet.</p>{% endif %}
+</div>
+{% endblock %}
