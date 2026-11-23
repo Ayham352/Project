@@ -19,6 +19,7 @@ from bench.benchmark import questions                 # noqa: E402
 from app.db import get_repo                           # noqa: E402
 from app.game import play_turn                        # noqa: E402
 import app.web as web                                 # noqa: E402
+import mysql.connector                                # noqa: E402
 
 MODES = ("modern", "baseline")
 
@@ -245,10 +246,22 @@ class ModernTests(SharedBehaviour, Base):
             self.sql("ALTER TABLE logins MODIFY ip VARCHAR(45) NOT NULL, ALGORITHM=INSTANT")
         self.assertIn("INSTANT is not supported", str(ctx.exception))
 
-    def test_inet6_needs_ipv4_in_mapped_form(self):
-        with self.assertRaises(Exception):          # a limit of MariaDB 10.11
+    def test_inet6_and_plain_ipv4_text_depends_on_the_version(self):
+        # MariaDB 10.11 refuses '10.0.0.9' in an INET6 column; 11.8 accepts it.
+        # The app never relies on either: to_inet6() always sends ::ffff:a.b.c.d.
+        version = self.sql("SELECT VERSION()")[0][0]
+        major = int(version.split(".")[0])
+        try:
             self.sql("INSERT INTO logins (player_id, ip) VALUES (%s, '10.0.0.9')", (self.a,))
-        self.repo.log_login(self.a, "10.0.0.9")     # to_inet6() handles it
+            stored = self.sql("SELECT ip FROM logins")[0][0]
+            print(f"\n  MariaDB {version}: INET6 accepted '10.0.0.9' and stored {stored!r}")
+            self.assertGreaterEqual(major, 11, "10.x was expected to refuse plain IPv4")
+            self.assertIn(stored, ("::ffff:10.0.0.9", "::10.0.0.9"))
+            self.sql("DELETE FROM logins")
+        except mysql.connector.Error as err:
+            print(f"\n  MariaDB {version}: INET6 refused '10.0.0.9' ({err.errno})")
+            self.assertLess(major, 11, "this version refused plain IPv4")
+        self.repo.log_login(self.a, "10.0.0.9")     # what the app does, on every version
         self.assertEqual(self.sql("SELECT ip FROM logins")[0][0], "::ffff:10.0.0.9")
 
 
