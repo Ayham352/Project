@@ -1,0 +1,71 @@
+name: tests
+
+# Runs on every push: a fresh machine sets everything up with the one setup
+# command, runs all tests against both versions, and re-runs a small
+# benchmark to show the findings reproduce on another machine.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mariadb: ["10.11"]          # the version the project was developed against
+        experimental: [false]
+        include:
+          - mariadb: "11.8"         # newest LTS, checked but allowed to fail
+            experimental: true
+    continue-on-error: ${{ matrix.experimental }}
+    name: MariaDB ${{ matrix.mariadb }}
+
+    services:
+      mariadb:
+        image: mariadb:${{ matrix.mariadb }}
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "1"   # throwaway CI container, no secret needed
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt coverage
+
+      - name: One-command setup (databases, user, tables)
+        env:
+          MARIADB_ADMIN_PASSWORD: ""               # matches the empty CI root password
+        run: |
+          cp .env.example .env
+          sed -i 's/^DB_HOST=localhost/DB_HOST=127.0.0.1/' .env
+          python -m app.setup --host 127.0.0.1 --app-host '%'
+
+      - name: Tests (both versions) with coverage
+        run: |
+          python -m coverage run --source=app -m unittest -v
+          python -m coverage report -m
+
+      - name: Small benchmark run (same harness, smaller data)
+        env:
+          BENCH_GAMES: "20000"
+          BENCH_LOGINS: "40000"
+          BENCH_PLAYED: "50"
+          BENCH_MIGRATION_ROWS: "100000"
+          BENCH_REPEATS: "2"
+        run: python -m bench.benchmark
+
+      - name: Keep the benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-mariadb-${{ matrix.mariadb }}
+          path: results/
